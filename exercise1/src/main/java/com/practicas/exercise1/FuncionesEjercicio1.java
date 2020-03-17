@@ -262,7 +262,7 @@ public class FuncionesEjercicio1 {
 		for (int i = 0; i < tamanoArray; i++) {
 			char ch = ((JSONObject) array.get(i)).getJSONObject("Identification").getString("ID").charAt(pos);
 			boolean esDigito = Character.isDigit(ch);
-			if(esDigito) {
+			if (esDigito) {
 				JSONObject objReturn = new JSONObject();
 				JSONObject jObj = array.getJSONObject(i);
 				objReturn.put("model", jObj.getJSONObject("Identification").getString("ID"));
@@ -271,6 +271,34 @@ public class FuncionesEjercicio1 {
 		}
 		return arrayReturn;
 
+	}
+	
+	public JSONArray modeloMarcaHibrido(JSONArray array, boolean hibrido) {
+		
+		JSONArray arrayReturn = new JSONArray();
+		
+		int tamanoArray = array.length();
+
+		for (int i = 0; i < tamanoArray; i++) {
+			boolean hibridoJson = ((JSONObject) array.get(i)).getJSONObject("Engine Information")
+					.getBoolean("Hybrid");
+			if(hibrido && hibridoJson) {
+				JSONObject objReturn = new JSONObject();
+				JSONObject jObj = array.getJSONObject(i);
+				objReturn.put("make", jObj.getJSONObject("Identification").getString("Make"));
+				objReturn.put("model", jObj.getJSONObject("Identification").getString("ID"));
+				arrayReturn.put(objReturn);
+			}else if(!hibrido && !hibridoJson){
+				JSONObject objReturn = new JSONObject();
+				JSONObject jObj = array.getJSONObject(i);
+				objReturn.put("make", jObj.getJSONObject("Identification").getString("Make"));
+				objReturn.put("model", jObj.getJSONObject("Identification").getString("ID"));
+				arrayReturn.put(objReturn);
+			}
+		}
+		
+		return arrayReturn;
+		
 	}
 
 }
