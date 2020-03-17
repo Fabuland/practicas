@@ -22,6 +22,10 @@ public class Exercise1 {
 		System.out.println(funciones.marcaModeloTraccionTrasera(array, true));
 		System.out.println("\nMarca y modelo de los coches con combustible diesel o de otro tipo:\n");
 		System.out.println(funciones.marcaModeloCombustible(array, true));
+		System.out.println("\nMarca y modelo de los coches con fecha especificada:\n");
+		System.out.println(funciones.marcaModeloFechaOrdenado(array, 30, 2011));
+		System.out.println("\nModelo de los coches con numero en la posicion indicada:\n");
+		System.out.println(funciones.modeloCaracterNumero(array, 2));
 
 	}
 
