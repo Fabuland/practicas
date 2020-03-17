@@ -1,5 +1,10 @@
 package com.practicas.exercise1;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -21,22 +26,21 @@ public class FuncionesEjercicio1 {
 		for (int i = suelo - 1; i < techo; i++) {
 			JSONObject objetoReturn = new JSONObject();
 			JSONObject jObjeto = array.getJSONObject(contador);
-			objetoReturn.put("Make", jObjeto.getJSONObject("Identification").getString("Make"));
-			objetoReturn.put("ID", jObjeto.getJSONObject("Identification").getString("ID"));
+			objetoReturn.put("make", jObjeto.getJSONObject("Identification").getString("Make"));
+			objetoReturn.put("id", jObjeto.getJSONObject("Identification").getString("ID"));
 			arrayReturn.put(objetoReturn);
 
 			contador++;
-			
 
 		}
-		
+
 		return arrayReturn;
 	}
 
 	/**
 	 * 
 	 * @param array
-	 * @param nCoches numero de coches que busca
+	 * @param nCoches  numero de coches que busca
 	 * @param potencia potencia minima para recoger la marca y el modelo
 	 */
 	public JSONArray marcaModeloPotencia(JSONArray array, int nCoches, int potencia) {
@@ -58,8 +62,8 @@ public class FuncionesEjercicio1 {
 			if (cocheHorsepower > potencia) {
 				JSONObject objetoReturn = new JSONObject();
 				JSONObject jObjeto = array.getJSONObject(contador);
-				objetoReturn.put("Make", jObjeto.getJSONObject("Identification").getString("Make"));
-				objetoReturn.put("ID", jObjeto.getJSONObject("Identification").getString("ID"));
+				objetoReturn.put("make", jObjeto.getJSONObject("Identification").getString("Make"));
+				objetoReturn.put("id", jObjeto.getJSONObject("Identification").getString("ID"));
 				arrayReturn.put(objetoReturn);
 				diezPrimeros++;
 			}
@@ -68,79 +72,125 @@ public class FuncionesEjercicio1 {
 		}
 		return arrayReturn;
 	}
-	
+
 	/**
 	 * 
 	 * @param array
-	 * @param transmision tipo de transmision que se puede introducir,las dos opciones son "automatico" o "manual"
+	 * @param transmision tipo de transmision que se puede introducir,las dos
+	 *                    opciones son "automatico" o "manual"
 	 */
 	public JSONArray marcaModeloAutomáticos(JSONArray array, String transmision) {
-		
+
 		int nTotales = array.length();
 		int contador = 0;
 		String transmIntr = "";
 		JSONArray arrayReturn = new JSONArray();
-		//Depende de lo que introduzcas asigna un valor u otro a la variable transmIntr
-		if(transmision.equals("automatico")) {
+		// Depende de lo que introduzcas asigna un valor u otro a la variable transmIntr
+		if (transmision.equals("automatico")) {
 			transmIntr = "Automatic transmission";
-		}else if(transmision.equals("manual")) {
+		} else if (transmision.equals("manual")) {
 			transmIntr = "Manual transmission";
-		}else {
+		} else {
 			System.out.println("Escribe automatico o manual para recibir el resultado");
 		}
-		
-		while(contador < nTotales) {
-			
-			String transmCoche = ((JSONObject) array.get(contador)).getJSONObject("Identification").getString("Classification");
-			//Si la transmision del coche es igual a la introducida por el usuario, imprime el modelo y la marca del coche
-			if(transmCoche.equals(transmIntr)) {
+
+		while (contador < nTotales) {
+
+			String transmCoche = ((JSONObject) array.get(contador)).getJSONObject("Identification")
+					.getString("Classification");
+			// Si la transmision del coche es igual a la introducida por el usuario, imprime
+			// el modelo y la marca del coche
+			if (transmCoche.equals(transmIntr)) {
 				JSONObject objetoReturn = new JSONObject();
 				JSONObject jObjeto = array.getJSONObject(contador);
-				objetoReturn.put("Make", jObjeto.getJSONObject("Identification").getString("Make"));
-				objetoReturn.put("ID", jObjeto.getJSONObject("Identification").getString("ID"));
+				objetoReturn.put("make", jObjeto.getJSONObject("Identification").getString("Make"));
+				objetoReturn.put("id", jObjeto.getJSONObject("Identification").getString("ID"));
 				arrayReturn.put(objetoReturn);
 			}
 			contador++;
 		}
 		return arrayReturn;
-		
+
 	}
-	
+
 	/**
 	 * 
 	 * @param array
-	 * @param traccion    true o false para definir la traccion
-	 * @return            devuelve el array
+	 * @param traccion true o false para definir la traccion
+	 * @return devuelve el array
 	 */
 	public JSONArray marcaModeloTraccionTrasera(JSONArray array, boolean traccion) {
-			
-			int nTotales = array.length();
-			int contador = 0;
-			String traseraIntr = "Rear-wheel drive";
-			JSONArray arrayReturn = new JSONArray();
-			
-			while(contador < nTotales) {
-				
-				String traccCoche = ((JSONObject) array.get(contador)).getJSONObject("Engine Information").getString("Driveline");
-				//Si la traccion del coche es trasera y coincide con lo que ha introducido el usuario (true), imprime modelo y marca
-				if(traccCoche.equals(traseraIntr) && traccion == true) {
-					JSONObject objetoReturn = new JSONObject();
-					JSONObject jObjeto = array.getJSONObject(contador);
-					objetoReturn.put("Make", jObjeto.getJSONObject("Identification").getString("Make"));
-					objetoReturn.put("ID", jObjeto.getJSONObject("Identification").getString("ID"));
-					arrayReturn.put(objetoReturn);
-				//Si la traccion del coche no es trasera y coincide con lo que ha introducido el usuario (false), imprime modelo y marca
-				}else if(!traccCoche.equals(traseraIntr) && traccion == false) {
-					JSONObject objetoReturn = new JSONObject();
-					JSONObject jObjeto = array.getJSONObject(contador);
-					objetoReturn.put("Make", jObjeto.getJSONObject("Identification").getString("Make"));
-					objetoReturn.put("ID", jObjeto.getJSONObject("Identification").getString("ID"));
-					arrayReturn.put(objetoReturn);
-				}
-				contador++;
+
+		int nTotales = array.length();
+		int contador = 0;
+		String traseraIntr = "Rear-wheel drive";
+		JSONArray arrayReturn = new JSONArray();
+
+		while (contador < nTotales) {
+
+			String traccCoche = ((JSONObject) array.get(contador)).getJSONObject("Engine Information")
+					.getString("Driveline");
+			// Si la traccion del coche es trasera y coincide con lo que ha introducido el
+			// usuario (true), imprime modelo y marca
+			if (traccCoche.equals(traseraIntr) && traccion) {
+				JSONObject objetoReturn = new JSONObject();
+				JSONObject jObjeto = array.getJSONObject(contador);
+				objetoReturn.put("make", jObjeto.getJSONObject("Identification").getString("Make"));
+				objetoReturn.put("id", jObjeto.getJSONObject("Identification").getString("ID"));
+				arrayReturn.put(objetoReturn);
+				// Si la traccion del coche no es trasera y coincide con lo que ha introducido
+				// el usuario (false), imprime modelo y marca
+			} else if (!traccCoche.equals(traseraIntr) && !traccion) {
+				JSONObject objetoReturn = new JSONObject();
+				JSONObject jObjeto = array.getJSONObject(contador);
+				objetoReturn.put("make", jObjeto.getJSONObject("Identification").getString("Make"));
+				objetoReturn.put("id", jObjeto.getJSONObject("Identification").getString("ID"));
+				arrayReturn.put(objetoReturn);
 			}
-			return arrayReturn;
-			
+			contador++;
 		}
-	
+		return arrayReturn;
+
 	}
+
+	/**
+	 * 
+	 * @param array
+	 * @param combustible true o false para definir el tipo de combustible
+	 * @return devuelve el array
+	 */
+	public JSONArray marcaModeloCombustible(JSONArray array, boolean combustible) {
+
+		int nTotales = array.length();
+		int contador = 0;
+		String dieselIntr = "Diesel fuel";
+		JSONArray arrayReturn = new JSONArray();
+
+		while (contador < nTotales) {
+
+			String combCoche = ((JSONObject) array.get(contador)).getJSONObject("Fuel Information")
+					.getString("Fuel Type");
+			// Si el combustible del coche es diesel y coincide con lo que ha introducido el
+			// usuario (true), imprime modelo y marca
+			if (combCoche.equals(dieselIntr) && combustible) {
+				JSONObject objetoReturn = new JSONObject();
+				JSONObject jObjeto = array.getJSONObject(contador);
+				objetoReturn.put("make", jObjeto.getJSONObject("Identification").getString("Make"));
+				objetoReturn.put("id", jObjeto.getJSONObject("Identification").getString("ID"));
+				arrayReturn.put(objetoReturn);
+				// Si el combustible del coche no es diesel y coincide con lo que ha introducido
+				// el usuario (false), imprime modelo y marca
+			} else if (!combCoche.equals(dieselIntr) && !combustible) {
+				JSONObject objetoReturn = new JSONObject();
+				JSONObject jObjeto = array.getJSONObject(contador);
+				objetoReturn.put("make", jObjeto.getJSONObject("Identification").getString("Make"));
+				objetoReturn.put("id", jObjeto.getJSONObject("Identification").getString("ID"));
+				arrayReturn.put(objetoReturn);
+			}
+			contador++;
+		}
+		return arrayReturn;
+
+	}
+
+}
