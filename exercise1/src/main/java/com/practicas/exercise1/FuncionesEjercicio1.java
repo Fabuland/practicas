@@ -192,5 +192,67 @@ public class FuncionesEjercicio1 {
 		return arrayReturn;
 
 	}
+	
+	
+	/**
+	 * 
+	 * @param array  
+	 * @param nCoches  primeros n coches que busca
+	 * @param fecha	   fecha del coche
+	 * @return   devuelve el array
+	 */
+	public JSONArray marcaModeloFechaOrdenado(JSONArray array, int nCoches, int fecha) {
+
+		if (fecha < 0) {
+			return null;
+		}
+
+		JSONArray arrayReturn = new JSONArray();
+		int contador = 0;
+		
+		//Busca todos los coches con la fecha introducida
+		for (int i = 0; contador < nCoches; i++) {
+			JSONObject jObj = (JSONObject) array.get(i);
+
+			if (jObj.getJSONObject("Identification").getInt("Year") == fecha) {
+				JSONObject objReturn = new JSONObject();
+				objReturn.put("make", jObj.getJSONObject("Identification").getString("Make"));
+				objReturn.put("model", jObj.getJSONObject("Identification").getString("ID"));
+				objReturn.put("horsepower", jObj.getJSONObject("Engine Information").getJSONObject("Engine Statistics")
+						.getInt("Horsepower"));
+				arrayReturn.put(objReturn);
+				contador++;
+			}
+		}
+		//Pasamos del JSONArray arrayReturn al nuevo List creado para poder comparar
+		int returnTamano = arrayReturn.length();
+		List<JSONObject> listJson = new ArrayList<>();
+		for (int i = 0; i < returnTamano; i++) {
+			listJson.add(arrayReturn.getJSONObject(i));
+		}
+		
+		//Comparamos los valores de la potencia de cada coche
+		Collections.sort(listJson, new Comparator<JSONObject>() {
+
+			private static final String potencia = "horsepower";
+
+			@Override
+			public int compare(JSONObject a, JSONObject b) {
+
+				Integer valorA = a.getInt(potencia);
+				Integer valorB = b.getInt(potencia);
+
+				return valorB.compareTo(valorA);
+			}
+		});
+		//Creamos un nuevo JSONArray ya ordenado con los valores del List
+		JSONArray arrayOrden = new JSONArray();
+		for (int i = 0; i < listJson.size(); i++) {
+			arrayOrden.put(listJson.get(i));
+		}
+
+		return arrayOrden;
+
+	}
 
 }
