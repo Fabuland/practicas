@@ -19,7 +19,7 @@ public class Exercise1 {
 		System.out.println(funciones.marcaModeloPotencia(array, 10, 150));
 		// 3
 		System.out.println("\nMarca y modelo de los coches automáticos o manuales:\n");
-		System.out.println(funciones.marcaModeloAutomáticos(array, "automatico"));
+		System.out.println(funciones.marcaModeloAutomaticos(array, "automatico"));
 		// 4
 		System.out.println("\nMarca y modelo de los coches con traccion trasera o sin ella:\n");
 		System.out.println(funciones.marcaModeloTraccionTrasera(array, true));

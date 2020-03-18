@@ -87,7 +87,7 @@ public class FuncionesEjercicio1 {
 	 * @param transmision tipo de transmision que se puede introducir,las dos
 	 *                    opciones son "automatico" o "manual"
 	 */
-	public JSONArray marcaModeloAutomáticos(JSONArray array, String transmision) {
+	public JSONArray marcaModeloAutomaticos(JSONArray array, String transmision) {
 
 		int nTotales = array.length();
 		int contador = 0;
