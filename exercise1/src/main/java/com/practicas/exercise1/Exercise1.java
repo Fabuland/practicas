@@ -39,8 +39,13 @@ public class Exercise1 {
 		System.out.println("\nModelo de los coches con 6 velocidades:\n");
 		System.out.println(funciones.cochesVelocidades(array, 6));
 		// 11
-		System.out.println("\nModelo y marca de los coches con un consumo menor al indicado ordenado de la manera especificada:\n");
+		System.out.println(
+				"\nModelo y marca de los coches con un consumo menor al indicado ordenado de la manera especificada:\n");
 		System.out.println(funciones.modeloMarcaConsumo(array, 18, true, true));
+		// 12
+		System.out.println(
+				"\nModelo y marca de los coches con caracteres especifico dentro de su engine type:\n");
+		System.out.println(funciones.modeloMarcaIncluyeCaracter(array, "hp"));
 
 	}
 

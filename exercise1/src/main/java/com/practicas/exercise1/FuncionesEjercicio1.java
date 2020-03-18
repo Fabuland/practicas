@@ -262,11 +262,10 @@ public class FuncionesEjercicio1 {
 
 	}
 
-	
 	/**
 	 * 
 	 * @param array
-	 * @param pos posicion en el string para buscar el numero
+	 * @param pos   posicion en el string para buscar el numero
 	 * @return
 	 */
 	public JSONArray modeloCaracterNumero(JSONArray array, int pos) {
@@ -278,8 +277,10 @@ public class FuncionesEjercicio1 {
 		JSONArray arrayReturn = new JSONArray();
 		int tamanoArray = array.length();
 
+		// Busca todos los coches que tengan un digito en la posicion indicada
 		for (int i = 0; i < tamanoArray; i++) {
 			char ch = ((JSONObject) array.get(i)).getJSONObject("Identification").getString("ID").charAt(pos);
+			// isDigit es un metodo que comprueba si el caracter es un digito
 			boolean esDigito = Character.isDigit(ch);
 			if (esDigito) {
 				JSONObject objReturn = new JSONObject();
@@ -292,7 +293,6 @@ public class FuncionesEjercicio1 {
 
 	}
 
-	
 	/**
 	 * 
 	 * @param array
@@ -305,6 +305,8 @@ public class FuncionesEjercicio1 {
 
 		int tamanoArray = array.length();
 
+		// Busca si el coche es hibrido o no y compara el boolean con el introducido por
+		// el usuario
 		for (int i = 0; i < tamanoArray; i++) {
 			boolean hibridoJson = ((JSONObject) array.get(i)).getJSONObject("Engine Information").getBoolean("Hybrid");
 			if (hibrido == hibridoJson) {
@@ -341,16 +343,19 @@ public class FuncionesEjercicio1 {
 		int nTotales = array.length();
 		JSONArray arrayReturn = new JSONArray();
 
+		// Si la velocidad del coche coincide con lo que ha introducido el
+		// usuario, imprime modelo y marca
 		for (int i = 0; i < nTotales; i++) {
-
 			int speedCoche = ((JSONObject) array.get(i)).getJSONObject("Engine Information")
 					.getInt("Number of Forward Gears");
-			// Si el combustible del coche es diesel y coincide con lo que ha introducido el
-			// usuario (true), imprime modelo y marca
+
 			if (speedCoche == velocidades) {
 				JSONObject objetoReturn = new JSONObject();
 				JSONObject jObjeto = array.getJSONObject(i);
-				objetoReturn.put("id", jObjeto.getJSONObject("Identification").getString("ID"));
+				objetoReturn.put("engine information", jObjeto.getJSONObject("Engine Information"));
+				objetoReturn.put("identification", jObjeto.getJSONObject("Identification"));
+				objetoReturn.put("dimensions", jObjeto.getJSONObject("Dimensions"));
+				objetoReturn.put("fuel information", jObjeto.getJSONObject("Fuel Information"));
 				arrayReturn.put(objetoReturn);
 
 			}
@@ -362,9 +367,9 @@ public class FuncionesEjercicio1 {
 	/**
 	 * 
 	 * @param array
-	 * @param consumo consumo mínimo del coche
+	 * @param consumo   consumo mínimo del coche
 	 * @param siConsumo tener en cuenta el consumo
-	 * @param orden ascendente o descendente mayor/menor consumo
+	 * @param orden     ascendente o descendente mayor/menor consumo
 	 * @return
 	 */
 	public JSONArray modeloMarcaConsumo(JSONArray array, int consumo, boolean siConsumo, boolean orden) {
@@ -375,6 +380,7 @@ public class FuncionesEjercicio1 {
 		int nTotales = array.length();
 		JSONArray arrayReturn = new JSONArray();
 
+		//Busca los coches con un consumo menor al introducido por el usuario, siempre que siConsumo sea true
 		for (int i = 0; i < nTotales; i++) {
 			int consumoCoche = ((JSONObject) array.get(i)).getJSONObject("Fuel Information").getInt("City mph");
 			if (siConsumo) {
@@ -398,12 +404,14 @@ public class FuncionesEjercicio1 {
 				}
 			}
 		}
-		
+
+		//Pasamos de JSONArray a List
 		List<JSONObject> listJson = new ArrayList<JSONObject>();
 		for (int i = 0; i < arrayReturn.length(); i++) {
 			listJson.add(arrayReturn.getJSONObject(i));
 		}
-		
+
+		//Ordenamos dependiendo del orden que haya introducido el usuario
 		Collections.sort(listJson, new Comparator<JSONObject>() {
 
 			private static final String MPH = "mph";
@@ -431,12 +439,49 @@ public class FuncionesEjercicio1 {
 
 			}
 		});
+		//Volvemos a pasar a JSONArray
 		JSONArray arrayOrden = new JSONArray();
 		for (int i = 0; i < listJson.size(); i++) {
 			arrayOrden.put(listJson.get(i));
 		}
 
 		return arrayOrden;
+
+	}
+
+	/**
+	 * 
+	 * @param array
+	 * @param caracteres el string que debe estar incluido en el tipo de motor del coche
+	 * @return
+	 */
+	public JSONArray modeloMarcaIncluyeCaracter(JSONArray array, String caracteres) {
+
+		if (caracteres.length() == 0) {
+			return null;
+		}
+		JSONArray arrayReturn = new JSONArray();
+		int nTotales = array.length();
+		
+		//Pasamos de JSONArray a List
+		List<JSONObject> listJson = new ArrayList<JSONObject>();
+		for (int i = 0; i < nTotales; i++) {
+			listJson.add(array.getJSONObject(i));
+		}
+
+		//Comprueba si el string existe dentro de cada uno de los coches
+		for (int i = 0; i < array.length(); i++) {
+			String motorCoche = listJson.get(i).getJSONObject("Engine Information").getString("Engine Type");
+			if (motorCoche.contains(caracteres)) {
+				JSONObject objReturn = new JSONObject();
+				JSONObject jObj = array.getJSONObject(i);
+				objReturn.put("make", jObj.getJSONObject("Identification").getString("Make"));
+				objReturn.put("model", jObj.getJSONObject("Identification").getString("ID"));
+				arrayReturn.put(objReturn);
+			}
+		}
+
+		return arrayReturn;
 
 	}
 
