@@ -32,9 +32,15 @@ public class Exercise1 {
 		// 7
 		System.out.println("\nModelo de los coches con numero en la posicion indicada:\n");
 		System.out.println(funciones.modeloCaracterNumero(array, 2));
-		// 7
+		// 8
 		System.out.println("\nModelo y marca de los coches hibridos:\n");
 		System.out.println(funciones.modeloMarcaHibrido(array, true));
+		// 10
+		System.out.println("\nModelo de los coches con 6 velocidades:\n");
+		System.out.println(funciones.cochesVelocidades(array, 6));
+		// 11
+		System.out.println("\nModelo y marca de los coches con un consumo menor al indicado ordenado de la manera especificada:\n");
+		System.out.println(funciones.modeloMarcaConsumo(array, 18, true, true));
 
 	}
 

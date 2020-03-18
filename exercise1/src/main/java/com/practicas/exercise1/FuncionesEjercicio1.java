@@ -17,6 +17,10 @@ public class FuncionesEjercicio1 {
 	 */
 	public JSONArray marcaModeloIntervalo(JSONArray array, int suelo, int techo) {
 
+		if (suelo <= 0 || suelo > techo || techo > array.length() - 1) {
+			return null;
+		}
+
 		int contador = suelo - 1;
 		// Recorre n veces del coche número "suelo" al "techo" para recoger el modelo y
 		// la marca
@@ -44,6 +48,10 @@ public class FuncionesEjercicio1 {
 	 * @param potencia potencia minima para recoger la marca y el modelo
 	 */
 	public JSONArray marcaModeloPotencia(JSONArray array, int nCoches, int potencia) {
+
+		if (nCoches <= 0 || nCoches > array.length() - 1 || potencia <= 0) {
+			return null;
+		}
 
 		// int que sale del while y a su vez controla la posición en los arrays de
 		// modelo y marca
@@ -254,7 +262,18 @@ public class FuncionesEjercicio1 {
 
 	}
 
+	
+	/**
+	 * 
+	 * @param array
+	 * @param pos posicion en el string para buscar el numero
+	 * @return
+	 */
 	public JSONArray modeloCaracterNumero(JSONArray array, int pos) {
+
+		if (pos < 0) {
+			return null;
+		}
 
 		JSONArray arrayReturn = new JSONArray();
 		int tamanoArray = array.length();
@@ -273,6 +292,13 @@ public class FuncionesEjercicio1 {
 
 	}
 
+	
+	/**
+	 * 
+	 * @param array
+	 * @param hibrido si es hibrido o no
+	 * @return
+	 */
 	public JSONArray modeloMarcaHibrido(JSONArray array, boolean hibrido) {
 
 		JSONArray arrayReturn = new JSONArray();
@@ -281,13 +307,13 @@ public class FuncionesEjercicio1 {
 
 		for (int i = 0; i < tamanoArray; i++) {
 			boolean hibridoJson = ((JSONObject) array.get(i)).getJSONObject("Engine Information").getBoolean("Hybrid");
-			if (hibrido && hibridoJson) {
+			if (hibrido == hibridoJson) {
 				JSONObject objReturn = new JSONObject();
 				JSONObject jObj = array.getJSONObject(i);
 				objReturn.put("make", jObj.getJSONObject("Identification").getString("Make"));
 				objReturn.put("model", jObj.getJSONObject("Identification").getString("ID"));
 				arrayReturn.put(objReturn);
-			} else if (!hibrido && !hibridoJson) {
+			} else if (!hibrido == !hibridoJson) {
 				JSONObject objReturn = new JSONObject();
 				JSONObject jObj = array.getJSONObject(i);
 				objReturn.put("make", jObj.getJSONObject("Identification").getString("Make"));
@@ -297,6 +323,120 @@ public class FuncionesEjercicio1 {
 		}
 
 		return arrayReturn;
+
+	}
+
+	/**
+	 * 
+	 * @param array
+	 * @param velocidades numero de velocidades del coche
+	 * @return
+	 */
+	public JSONArray cochesVelocidades(JSONArray array, int velocidades) {
+
+		if (velocidades <= 0 || velocidades > 8) {
+			return null;
+		}
+
+		int nTotales = array.length();
+		JSONArray arrayReturn = new JSONArray();
+
+		for (int i = 0; i < nTotales; i++) {
+
+			int speedCoche = ((JSONObject) array.get(i)).getJSONObject("Engine Information")
+					.getInt("Number of Forward Gears");
+			// Si el combustible del coche es diesel y coincide con lo que ha introducido el
+			// usuario (true), imprime modelo y marca
+			if (speedCoche == velocidades) {
+				JSONObject objetoReturn = new JSONObject();
+				JSONObject jObjeto = array.getJSONObject(i);
+				objetoReturn.put("id", jObjeto.getJSONObject("Identification").getString("ID"));
+				arrayReturn.put(objetoReturn);
+
+			}
+		}
+		return arrayReturn;
+
+	}
+
+	/**
+	 * 
+	 * @param array
+	 * @param consumo consumo mínimo del coche
+	 * @param siConsumo tener en cuenta el consumo
+	 * @param orden ascendente o descendente mayor/menor consumo
+	 * @return
+	 */
+	public JSONArray modeloMarcaConsumo(JSONArray array, int consumo, boolean siConsumo, boolean orden) {
+
+		if (consumo <= 0) {
+			return null;
+		}
+		int nTotales = array.length();
+		JSONArray arrayReturn = new JSONArray();
+
+		for (int i = 0; i < nTotales; i++) {
+			int consumoCoche = ((JSONObject) array.get(i)).getJSONObject("Fuel Information").getInt("City mph");
+			if (siConsumo) {
+				if (consumoCoche < consumo) {
+					JSONObject objReturn = new JSONObject();
+					JSONObject jObj = array.getJSONObject(i);
+					objReturn.put("make", jObj.getJSONObject("Identification").getString("Make"));
+					objReturn.put("model", jObj.getJSONObject("Identification").getString("ID"));
+					objReturn.put("mph", jObj.getJSONObject("Fuel Information").getInt("City mph"));
+					arrayReturn.put(objReturn);
+				}
+			} else {
+				if (consumoCoche > consumo) {
+					JSONObject objReturn = new JSONObject();
+					JSONObject jObj = array.getJSONObject(i);
+					objReturn.put("make", jObj.getJSONObject("Identification").getString("Make"));
+					objReturn.put("model", jObj.getJSONObject("Identification").getString("ID"));
+					objReturn.put("mph", jObj.getJSONObject("Fuel Information").getInt("City mph"));
+					// se añade el jsonobject al jsonarray de retorno
+					arrayReturn.put(objReturn);
+				}
+			}
+		}
+		
+		List<JSONObject> listJson = new ArrayList<JSONObject>();
+		for (int i = 0; i < arrayReturn.length(); i++) {
+			listJson.add(arrayReturn.getJSONObject(i));
+		}
+		
+		Collections.sort(listJson, new Comparator<JSONObject>() {
+
+			private static final String MPH = "mph";
+
+			@Override
+			public int compare(JSONObject a, JSONObject b) {
+				Integer valA = 0;
+				Integer valB = 0;
+
+				valA = (int) a.get(MPH);
+				valB = (int) b.get(MPH);
+
+				int multiplicar = -1;
+				if (!orden) {
+					multiplicar = 1;
+				}
+
+				if (valA < valB) {
+					return multiplicar * -1;
+				} else if (valA > valB) {
+					return multiplicar * 1;
+				} else {
+					return multiplicar * (a.getString("model").compareTo(b.getString("model")));
+				}
+
+			}
+		});
+		JSONArray arrayOrden = new JSONArray();
+		for (int i = 0; i < listJson.size(); i++) {
+			arrayOrden.put(listJson.get(i));
+		}
+
+		return arrayOrden;
 
 	}
 
