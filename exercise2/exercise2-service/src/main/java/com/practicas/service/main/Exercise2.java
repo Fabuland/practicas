@@ -1,5 +1,6 @@
 package com.practicas.service.main;
 
+import com.practicas.model.constants.ExerciseConstants;
 import com.practicas.service.CarService;
 
 public class Exercise2 {
@@ -14,7 +15,10 @@ public class Exercise2 {
 		System.out.println(CarService.marcaModeloPotencia(10, 150));
 		// 3
 		System.out.println("\nMarca y modelo de los coches automaticos o manuales:\n");
-		System.out.println(CarService.marcaModeloAutomaticos("Automatico"));
+		System.out.println(CarService.marcaModeloAutomaticos(ExerciseConstants.transmission.AUTOMATIC));
+		// 4
+		System.out.println("\nMarca y modelo de los coches automaticos o manuales:\n");
+		System.out.println(CarService.marcaModeloTraccion(ExerciseConstants.wheel.REAR));
 	}
 
 }

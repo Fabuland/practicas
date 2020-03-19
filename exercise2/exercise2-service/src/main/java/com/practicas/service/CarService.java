@@ -5,6 +5,7 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import com.practicas.model.Car;
+import com.practicas.model.constants.ExerciseConstants;
 import com.practicas.service.data.DatabaseJson;
 
 public class CarService {
@@ -73,32 +74,62 @@ public class CarService {
 	 * @param transmision define si es automatico o no
 	 * @return
 	 */
-	public static List<Car> marcaModeloAutomaticos(String transmision) {
+	public static List<Car> marcaModeloAutomaticos(ExerciseConstants.transmission transmision) {
 		List<Car> listCar = marcaModeloIntervalo(-1, -1);
 
-		if (transmision == null || transmision.equals("")) {
+		if (transmision == null) {
 			return null;
 		}
+		String transmIntr = "";
+		if (transmision.name().equals("AUTOMATIC")) {
+			transmIntr = "Automatic transmission";
+		} else if (transmision.name().equals("MANUAL")) {
+			transmIntr = "Manual transmission";
+		}
+
+		final String fTransmision = transmIntr;
 
 		Predicate<Car> p = new Predicate<Car>() {
 
 			@Override
 			public boolean test(Car t) {
-				String transmIntr = "";
 
-				if (transmision.toLowerCase().equals("automatico")) {
-					transmIntr = "Automatic transmission";
-				} else if (transmision.toLowerCase().equals("manual")) {
-					transmIntr = "Manual transmission";
-				} else {
-					System.out.println("Escribe automatico o manual para recibir el resultado");
-				}
-
-				return t.getIdentification().getClassification().equals(transmIntr);
+				return t.getIdentification().getClassification().equals(fTransmision);
 			}
 
 		};
 		List<Car> listCarReturn = listCar.stream().filter(p).collect(Collectors.toList());
+		return listCarReturn;
+	}
+
+	public static List<Car> marcaModeloTraccion(ExerciseConstants.wheel traccion) {
+		if (traccion == null) {
+			return null;
+		}
+		List<Car> listCar = marcaModeloIntervalo(-1, -1);
+		String traccIntr = "";
+		if (traccion.name().equals("FRONT")) {
+			traccIntr = "Front-wheel drive";
+		} else if (traccion.name().equals("REAR")) {
+			traccIntr = "Rear-wheel drive";
+		} else if (traccion.name().equals("ALL")) {
+			traccIntr = "All-wheel drive";
+		}
+
+		final String fTraccion = traccIntr;
+
+		Predicate<Car> p = new Predicate<Car>() {
+
+			@Override
+			public boolean test(Car t) {
+
+				return t.getIdentification().getClassification().equals(fTraccion);
+			}
+
+		};
+
+		List<Car> listCarReturn = listCar.stream().filter(p).collect(Collectors.toList());
+
 		return listCarReturn;
 	}
 
