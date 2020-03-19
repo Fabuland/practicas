@@ -12,5 +12,11 @@ public interface ExerciseConstants {
 		REAR,
 		ALL
 	}
+	
+	public static enum fuel{
+		DIESEL,
+		GASOLINA,
+		OTRO
+	}
 
 }

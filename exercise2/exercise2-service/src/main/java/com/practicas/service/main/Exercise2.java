@@ -17,8 +17,11 @@ public class Exercise2 {
 		System.out.println("\nMarca y modelo de los coches automaticos o manuales:\n");
 		System.out.println(CarService.marcaModeloAutomaticos(ExerciseConstants.transmission.AUTOMATIC));
 		// 4
-		System.out.println("\nMarca y modelo de los coches automaticos o manuales:\n");
+		System.out.println("\nMarca y modelo de los coches dependiendo de la traccion:\n");
 		System.out.println(CarService.marcaModeloTraccion(ExerciseConstants.wheel.REAR));
+		// 5
+		System.out.println("\nMarca y modelo de los coches dependiendo del combustible:\n");
+		System.out.println(CarService.marcaModeloCombustible(ExerciseConstants.fuel.DIESEL));
 	}
 
 }

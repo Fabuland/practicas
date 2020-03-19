@@ -123,7 +123,36 @@ public class CarService {
 			@Override
 			public boolean test(Car t) {
 
-				return t.getIdentification().getClassification().equals(fTraccion);
+				return t.getEngineinformation().getDriveline().equals(fTraccion);
+			}
+
+		};
+
+		List<Car> listCarReturn = listCar.stream().filter(p).collect(Collectors.toList());
+
+		return listCarReturn;
+	}
+	
+	public static List<Car> marcaModeloCombustible(ExerciseConstants.fuel combustible) {
+		if (combustible == null) {
+			return null;
+		}
+		List<Car> listCar = marcaModeloIntervalo(-1, -1);
+		String combIntr = "";
+		if (combustible.name().equals("DIESEL")) {
+			combIntr = "Diesel fuel";
+		} else if (combustible.name().equals("GASOLINA")) {
+			combIntr = "Gasoline";
+		}
+
+		final String fCombustible = combIntr;
+
+		Predicate<Car> p = new Predicate<Car>() {
+
+			@Override
+			public boolean test(Car t) {
+
+				return t.getFuelinformation().getFueltype().equals(fCombustible);
 			}
 
 		};
