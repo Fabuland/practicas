@@ -132,7 +132,7 @@ public class CarService {
 
 		return listCarReturn;
 	}
-	
+
 	public static List<Car> marcaModeloCombustible(ExerciseConstants.fuel combustible) {
 		if (combustible == null) {
 			return null;
@@ -159,6 +159,102 @@ public class CarService {
 
 		List<Car> listCarReturn = listCar.stream().filter(p).collect(Collectors.toList());
 
+		return listCarReturn;
+	}
+
+	public static List<Car> marcaModeloFechaOrdenado(int nCoches, int fecha, boolean orden) {
+
+		List<Car> listCar = marcaModeloIntervalo(-1, -1);
+
+		if (nCoches <= 0 || nCoches > listCar.size() - 1) {
+			return null;
+		}
+		ComparadorPotencia comparaPotencia = new ComparadorPotencia(orden);
+		List<Car> listCarReturn = listCar.stream().filter(car -> car.getIdentification().getYear() == fecha)
+				.limit(nCoches).sorted(comparaPotencia).collect(Collectors.toList());
+
+		return listCarReturn;
+	}
+
+	public static List<Car> modeloCaracterNumero(int pos) {
+
+		if (pos < 0) {
+			return null;
+		}
+
+		List<Car> listCar = marcaModeloIntervalo(-1, -1);
+
+		List<Car> listCarReturn = listCar.stream().filter(car -> {
+			return Character.isDigit(car.getIdentification().getId().charAt(pos));
+		}).collect(Collectors.toList());
+		return listCarReturn;
+	}
+
+	public static List<Car> marcaModeloHibrido(boolean hibrido) {
+
+		Predicate<Car> p = new Predicate<Car>() {
+
+			@Override
+			public boolean test(Car t) {
+				return t.getEngineinformation().isHybrid() == true;
+			}
+		};
+
+		List<Car> listCar = marcaModeloIntervalo(-1, -1);
+
+		List<Car> listCarReturn = listCar.stream().filter(p).collect(Collectors.toList());
+
+		return listCarReturn;
+
+	}
+
+	public static List<Car> cochesVelocidades(int velocidades) {
+		if (velocidades < 0 || velocidades > 8) {
+			return null;
+		}
+		Predicate<Car> p = new Predicate<Car>() {
+
+			@Override
+			public boolean test(Car t) {
+				return t.getEngineinformation().getNumberofforwardgears() == velocidades;
+			}
+		};
+
+		List<Car> listCar = marcaModeloIntervalo(-1, -1);
+
+		List<Car> listCarReturn = listCar.stream().filter(p).collect(Collectors.toList());
+
+		return listCarReturn;
+
+	}
+
+	public static List<Car> marcaModeloConsumo(int consumo, boolean orden) {
+
+		if (consumo <= 0) {
+			return null;
+		}
+
+		List<Car> listCar = marcaModeloIntervalo(-1, -1);
+
+		ComparadorConsumo consumoComparador = new ComparadorConsumo(orden);
+
+		List<Car> listCarReturn = listCar.stream().filter(car -> car.getFuelinformation().getCitymph() < consumo)
+				.sorted(consumoComparador).collect(Collectors.toList());
+		return listCarReturn;
+
+	}
+
+	public static List<Car> marcaModeloIncluyeCaracter(String caracteres) {
+
+		if (caracteres.length() == 0) {
+			return null;
+		}
+
+		List<Car> listCar = marcaModeloIntervalo(-1, -1);
+
+		List<Car> listCarReturn = listCar.stream()
+				.filter(car -> car.getEngineinformation().getEnginetype().contains(caracteres))
+				.collect(Collectors.toList());
 		return listCarReturn;
 	}
 
