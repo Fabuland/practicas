@@ -10,6 +10,58 @@ import com.practicas.service.data.DatabaseJson;
 
 public class CarService {
 
+	public static List<Car> getCars(int suelo, int techo) {
+
+		// comprobamos los parámetros de entrada
+
+		assert suelo < techo;
+
+		List<Car> listCar = DatabaseJson.loadDatabase().getDataParsed();
+
+		int begin = suelo;
+		if (begin < 0) {
+			begin = 0;
+		}
+		int end = techo;
+		if (end <= 0 || end > listCar.size()) {
+			end = listCar.size();
+		}
+
+		return listCar.subList(begin, end);
+	}
+
+	public static List<Car> getCars(int suelo, int techo, Predicate<Car> p) {
+
+		assert p != null;
+
+		List<Car> cars = getCars(suelo, techo).stream().filter(p).collect(Collectors.toList());
+		return cars;
+	}
+
+	public static List<Car> getCars(int suelo, int techo, Predicate<Car> p, CarComparator comparator) {
+
+		List<Car> cars = getCars(suelo, techo, p);
+		if (comparator != null) {
+			return cars.stream().sorted(comparator).collect(Collectors.toList());
+		}
+
+		return cars.stream().sorted().collect(Collectors.toList());
+	}
+
+	public static List<Car> getCars(int suelo, int techo, Predicate<Car> p, CarComparator comparator, int limit) {
+
+		assert limit > 0;
+
+		List<Car> cars = getCars(suelo, techo, p, comparator);
+		return cars.stream().limit(limit).collect(Collectors.toList());
+	}
+
+	public List<Car> getCars(int suelo, int techo, Predicate<Car> p, int limit) {
+		assert limit > 0;
+		List<Car> cars = getCars(suelo, techo, p);
+		return cars.stream().limit(limit).collect(Collectors.toList());
+	}
+
 	/**
 	 * 
 	 * @param listCar

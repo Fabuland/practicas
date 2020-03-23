@@ -26,5 +26,6 @@
     <modules>
     	<module>exercise2-model</module>
     	<module>exercise2-service</module>
+    	<module>Exercise2-web</module>
     </modules>
 </project>

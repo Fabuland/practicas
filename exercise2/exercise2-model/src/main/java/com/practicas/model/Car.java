@@ -1,19 +1,21 @@
 package com.practicas.model;
 
-public class Car {
+public class Car implements Comparable<Car>{
 
+	private int pk;
 	private EngineInformation engineinformation;
 	private Dimensions dimensions;
 	private Identification identification;
 	private FuelInformation fuelinformation;
-
+	
 	public Car() {
-
+		
 	}
 
-	public Car(EngineInformation engineinformation, Dimensions dimensions, Identification identification,
+	public Car(int pk, EngineInformation engineinformation, Dimensions dimensions, Identification identification,
 			FuelInformation fuelinformation) {
 		super();
+		this.pk = pk;
 		this.engineinformation = engineinformation;
 		this.dimensions = dimensions;
 		this.identification = identification;
@@ -52,10 +54,30 @@ public class Car {
 		this.fuelinformation = fuelinformation;
 	}
 
-	@Override
-	public String toString() {
-		return "{engineinformation: " + engineinformation + ",identification: " + identification.toString()
-				+ ",dimensions: " + dimensions.toString() + ",fuelinformation: " + fuelinformation.toString() + "}";
+	public int getPk() {
+		return pk;
 	}
 
+	public void setPk(int pk) {
+		this.pk = pk;
+	}
+	
+	@Override
+	public int compareTo(Car o) {
+		
+		return this.getIdentification().getId().compareTo(o.getIdentification().getId());
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		Car c1 = (Car)obj;
+		return this.getPk() == c1.getPk();
+	}
+
+	@Override
+	public String toString() {
+		return "{engineinformation: "+engineinformation+",dimensions: "+dimensions.toString()+"}";
+	}
+		
+	
 }

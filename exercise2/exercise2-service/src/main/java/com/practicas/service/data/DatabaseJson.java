@@ -20,6 +20,8 @@ public class DatabaseJson {
 	private static JSONArray _jsonArray = new JSONArray();
 
 	private static final Logger _log = Logger.getLogger(DatabaseJson.class.getName());
+	
+	private static DatabaseJson db;
 
 	private DatabaseJson() {
 		try {
@@ -31,9 +33,11 @@ public class DatabaseJson {
 
 	public static DatabaseJson loadDatabase() {
 
-		return new DatabaseJson();
-	}
-
+    	if(db == null) {
+    		db = new DatabaseJson();
+    	}
+        return db; 
+    }
 	private void loadJSONDB() throws IOException {
 
 		InputStream inputStream = this.getClass().getClassLoader().getResourceAsStream("cars.json");

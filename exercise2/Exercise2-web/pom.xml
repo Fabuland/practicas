@@ -7,8 +7,10 @@
 		<artifactId>exercise2</artifactId>
 		<version>1.0</version>
 	</parent>
-	<artifactId>exercise2-service</artifactId>
-	<packaging>jar</packaging>
+	<artifactId>exercise2-web</artifactId>
+	<packaging>war</packaging>
+
+
 	<build>
 		<plugins>
 			<plugin>
@@ -19,6 +21,10 @@
 					<target>8</target>
 				</configuration>
 			</plugin>
+			<plugin>
+				<artifactId>maven-war-plugin</artifactId>
+				<version>2.6</version>
+			</plugin>
 		</plugins>
 		<resources>
 			<resource>
@@ -26,11 +32,21 @@
 			</resource>
 		</resources>
 	</build>
+
 	<dependencies>
+
 		<dependency>
 			<groupId>com.practicas</groupId>
-			<artifactId>exercise2-model</artifactId>
+			<artifactId>exercise2-service</artifactId>
 			<version>1.0</version>
 		</dependency>
+
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>servlet-api</artifactId>
+			<version>2.5</version>
+			<scope>provided</scope>
+		</dependency>
+
 	</dependencies>
 </project>
