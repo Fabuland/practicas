@@ -13,6 +13,10 @@
 <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"></script>
 <script
 	src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
+<link rel="stylesheet"
+	href="https://use.fontawesome.com/releases/v5.6.3/css/all.css"
+	integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/"
+	crossorigin="anonymous">
 <script
 	src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
 <link rel="stylesheet" type="text/css" href="css/style.css" />
@@ -50,25 +54,60 @@
 					<li class="nav-item"><a class="nav-link disabled" href="#">Disabled</a>
 					</li>
 				</ul>
-				<form class="form-inline my-2 my-lg-0">
-					<input class="form-control mr-sm-2" type="search"
-						placeholder="Search" aria-label="Search">
-					<button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+				<form class="form-inline px-5">
+					<input class="form-control mx-3" type="search" placeholder="Search"
+						aria-label="Search">
+					<button class="btn btn-outline-success" type="submit">Search</button>
 				</form>
-				<p>
+				<div class="m-5">
 					Claro/oscuro
-					<button class="btn btn-dark" type="button" id="botonOscuro" onclick="modoOscuro()"></button>
-				</p>
+					<button class="btn btn-dark" type="button" id="botonOscuro"
+						onclick="modoOscuro()"></button>
+				</div>
 			</div>
 		</nav>
-		<h1>Coches</h1>
+		<h1 class="pb-5">Coches</h1>
+
+		<div class="row justify-content-between mb-3">
+			<h4 class="col-sm-3">Filter from:</h4>
+			<select class="col-sm-3 form-control" id="select1">
+				<option value="">- Brand -</option>
+				<%
+					List<String> brands = (List<String>) request.getAttribute("makes");
+				if (brands != null) {
+					for (String b : brands) {
+				%>
+				<option value="<%=b%>"><%=b%></option>
+				<%
+					}
+				}
+				%>
+
+			</select> <select class="col-sm-3 form-control" id="select2">
+				<option value="">- Years -</option>
+				<%
+					List<Integer> years = (List<Integer>) request.getAttribute("years");
+				if (years != null) {
+					for (Integer y : years) {
+				%>
+				<option value="<%=y%>"><%=y%></option>
+				<%
+					}
+				}
+				%>
+
+			</select>
+		</div>
 		<table
-			class="table table table-striped table-dark table-bordered table-hover">
+			class="table table table-striped table-light table-bordered table-hover"
+			id="table">
 			<thead>
 				<tr>
 					<th scope="col">ID</th>
 					<th scope="col">Modelo</th>
+					<th scope="col">Año</th>
 					<th scope="col">Marca</th>
+					<th scope="col">Action</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -80,7 +119,16 @@
 				<tr>
 					<th><%=c.getPk()%></th>
 					<td><%=c.getIdentification().getId()%></td>
+					<td><%=c.getIdentification().getYear()%></td>
 					<td><%=c.getIdentification().getMake()%></td>
+					<td>
+						<button type="button" class="btn btn-default">
+							<span class="fas fa-eye"></span>
+						</button>
+						<button type="button" class="btn btn-default">
+							<span class="far fa-trash-alt"></span>
+						</button>
+					</td>
 				</tr>
 				<%
 					}

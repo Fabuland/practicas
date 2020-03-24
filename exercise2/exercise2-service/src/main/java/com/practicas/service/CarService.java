@@ -1,6 +1,8 @@
 package com.practicas.service;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
@@ -11,8 +13,6 @@ import com.practicas.service.data.DatabaseJson;
 public class CarService {
 
 	public static List<Car> getCars(int suelo, int techo) {
-
-		// comprobamos los parámetros de entrada
 
 		assert suelo < techo;
 
@@ -56,10 +56,49 @@ public class CarService {
 		return cars.stream().limit(limit).collect(Collectors.toList());
 	}
 
-	public List<Car> getCars(int suelo, int techo, Predicate<Car> p, int limit) {
+	public static List<Car> getCars(int suelo, int techo, Predicate<Car> p, int limit) {
 		assert limit > 0;
+		
 		List<Car> cars = getCars(suelo, techo, p);
+		
 		return cars.stream().limit(limit).collect(Collectors.toList());
+	}
+
+	public Optional<Car> getCarByPk(int pk) {
+		assert pk >= 0;
+		
+		List<Car> cars = getCars(-1, -1);
+		
+		return cars.stream().filter(c -> c.getPk() == pk).findFirst();
+	}
+
+	public static final long carTotals = getCars(-1, -1).parallelStream().count();
+
+	public static List<Integer> getCarsYears() {
+		List<Car> cars = getCars(-1, -1);
+		List<Integer> carsYears = new ArrayList<>();
+		
+		for (int i = 0; i < cars.size(); i++) {
+			carsYears.add(cars.get(i).getIdentification().getYear());
+		}
+		
+		return carsYears.stream().distinct().sorted().collect(Collectors.toList());
+	}
+
+	public static List<String> getCarsMakes() {
+		List<Car> cars = getCars(-1, -1);
+		List<String> carsMakes = new ArrayList<>();
+		for (int i = 0; i < cars.size(); i++) {
+			carsMakes.add(cars.get(i).getIdentification().getMake());
+		}
+		return carsMakes.stream().distinct().sorted().collect(Collectors.toList());
+	}
+
+	public static long getCarsCount(Predicate<Car> p) {
+		
+		assert p != null;
+		
+		return (long) getCars(-1, -1).stream().filter(p).count();
 	}
 
 	/**
