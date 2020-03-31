@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import com.practicas.model.Car;
 import com.practicas.model.constants.ExerciseConstants;
@@ -58,17 +59,38 @@ public class CarService {
 
 	public static List<Car> getCars(int suelo, int techo, Predicate<Car> p, int limit) {
 		assert limit > 0;
-		
+
 		List<Car> cars = getCars(suelo, techo, p);
-		
+
 		return cars.stream().limit(limit).collect(Collectors.toList());
+	}
+
+	public static List<Car> getCars(int suelo, int techo, List<Predicate<Car>> ps) {
+
+		assert ps != null;
+		Stream<Car> stream = getCars(-1, -1).stream();
+		Stream<Car> streamD = getCars(-1, -1).stream();
+		for (Predicate<Car> p : ps) {
+			stream = stream.filter(p);
+			streamD = streamD.filter(p);
+		}
+		int count = (int) streamD.count();
+		List<Car> cars = new ArrayList<Car>();
+		if (count < 10) {
+			techo = count;
+			cars = stream.collect(Collectors.toList()).subList(0, techo);
+		} else {
+			cars = stream.collect(Collectors.toList()).subList(suelo, techo);
+		}
+
+		return cars;
 	}
 
 	public Optional<Car> getCarByPk(int pk) {
 		assert pk >= 0;
-		
+
 		List<Car> cars = getCars(-1, -1);
-		
+
 		return cars.stream().filter(c -> c.getPk() == pk).findFirst();
 	}
 
@@ -77,11 +99,11 @@ public class CarService {
 	public static List<Integer> getCarsYears() {
 		List<Car> cars = getCars(-1, -1);
 		List<Integer> carsYears = new ArrayList<>();
-		
+
 		for (int i = 0; i < cars.size(); i++) {
 			carsYears.add(cars.get(i).getIdentification().getYear());
 		}
-		
+
 		return carsYears.stream().distinct().sorted().collect(Collectors.toList());
 	}
 
@@ -94,11 +116,14 @@ public class CarService {
 		return carsMakes.stream().distinct().sorted().collect(Collectors.toList());
 	}
 
-	public static long getCarsCount(Predicate<Car> p) {
-		
-		assert p != null;
-		
-		return (long) getCars(-1, -1).stream().filter(p).count();
+	public static long getCarsCount(List<Predicate<Car>> ps) {
+
+		assert ps != null;
+		Stream<Car> stream = getCars(-1, -1).stream();
+		for (Predicate<Car> p : ps) {
+			stream = stream.filter(p);
+		}
+		return stream.count();
 	}
 
 	/**
@@ -347,6 +372,51 @@ public class CarService {
 				.filter(car -> car.getEngineinformation().getEnginetype().contains(caracteres))
 				.collect(Collectors.toList());
 		return listCarReturn;
+	}
+
+	public static List<String> getCarsTransmissions() {
+		List<Car> cars = getCars(-1, -1);
+		List<String> carsTransmissions = new ArrayList<>();
+		for (int i = 0; i < cars.size(); i++) {
+			carsTransmissions.add(cars.get(i).getEngineinformation().getTransmission());
+		}
+		return carsTransmissions.stream().distinct().sorted().collect(Collectors.toList());
+	}
+
+	public static List<Integer> getCarsNumberOfForwardGears() {
+		List<Car> cars = getCars(-1, -1);
+		List<Integer> carsNumberOfForwardGears = new ArrayList<>();
+		for (int i = 0; i < cars.size(); i++) {
+			carsNumberOfForwardGears.add(cars.get(i).getEngineinformation().getNumberofforwardgears());
+		}
+		return carsNumberOfForwardGears.stream().distinct().sorted().collect(Collectors.toList());
+	}
+
+	public static List<String> getCarsDrivelines() {
+		List<Car> cars = getCars(-1, -1);
+		List<String> carsDrivelines = new ArrayList<>();
+		for (int i = 0; i < cars.size(); i++) {
+			carsDrivelines.add(cars.get(i).getEngineinformation().getDriveline());
+		}
+		return carsDrivelines.stream().distinct().sorted().collect(Collectors.toList());
+	}
+
+	public static List<String> getCarsClassifications() {
+		List<Car> cars = getCars(-1, -1);
+		List<String> carsClassifications = new ArrayList<>();
+		for (int i = 0; i < cars.size(); i++) {
+			carsClassifications.add(cars.get(i).getIdentification().getClassification());
+		}
+		return carsClassifications.stream().distinct().sorted().collect(Collectors.toList());
+	}
+
+	public static List<String> getCarsFuelTypes() {
+		List<Car> cars = getCars(-1, -1);
+		List<String> carsFuelTypes = new ArrayList<>();
+		for (int i = 0; i < cars.size(); i++) {
+			carsFuelTypes.add(cars.get(i).getFuelinformation().getFueltype());
+		}
+		return carsFuelTypes.stream().distinct().sorted().collect(Collectors.toList());
 	}
 
 }
